@@ -22,14 +22,14 @@ namespace MessageFromSpace
             do
             {
                 name = Console.ReadLine();
-            } while (String.IsNullOrEmpty(name) && IsFileNameCorrect(name));
+            } while (String.IsNullOrEmpty(name) || IsFileNameCorrect(name));
 
             return name;
         }
 
         private static bool IsFileNameCorrect(string name)
         {
-            if(name.ToCharArray()[0] == '3' && name.ToCharArray()[1] == '0')
+            if(name.ToCharArray()[0] == '3' && name.ToCharArray()[1] == '5')
             {
                 return true;
             }

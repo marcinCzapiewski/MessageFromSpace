@@ -7,6 +7,7 @@ namespace MessageFromSpace
 {
     static class Decrypter
     {
+        public static int DigitsCounter { get; set; }
         private static char[] ToZeroChars =
             { 'a', 'B', 'c', 'D', 'e', 'F', 'g', 'H', 'i', 'J', 'k', 'L', 'm', 'N', 'o', 'P', 'q', 'R', 's', 'T', 'u', 'V', 'w', 'X', 'y', 'Z' };
         private static char[] ToOneChars =
@@ -14,10 +15,16 @@ namespace MessageFromSpace
 
         public static string Decrypt(string s)
         {
+            DigitsCounter = 0;
             StringBuilder sb = new StringBuilder();
             foreach(var c in s)
             {
-                if(ToZeroChars.Contains(c))
+                if (Char.IsDigit(c))
+                {
+                    DigitsCounter++;
+                    continue;
+                }
+                else if (ToZeroChars.Contains(c))
                 {
                     sb.Append(0);
                 }
@@ -26,6 +33,8 @@ namespace MessageFromSpace
                     sb.Append(1);
                 }
             }
+
+            Console.WriteLine();
 
             return sb.ToString();
         }
