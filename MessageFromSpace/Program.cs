@@ -6,8 +6,9 @@ namespace MessageFromSpace
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            FileManager.ReadFileName();
+            string fileContent = FileManager.GetFileContent();
+            string encryptedFile = Decrypter.Decrypt(fileContent);
+            Console.WriteLine(encryptedFile);
         }
     }
 }

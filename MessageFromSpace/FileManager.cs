@@ -18,7 +18,7 @@ namespace MessageFromSpace
         private static string ReadFileName()
         {
             string name;
-            Console.WriteLine("Podaj nazwę pliku: ");
+            Console.WriteLine("Podaj pełną ścieżkę z nazwą do pliku: ");
             do
             {
                 name = Console.ReadLine();
@@ -27,7 +27,7 @@ namespace MessageFromSpace
             return name;
         }
 
-        private static Boolean IsFileNameCorrect(string name)
+        private static bool IsFileNameCorrect(string name)
         {
             if(name.ToCharArray()[0] == '3' && name.ToCharArray()[1] == '0')
             {
