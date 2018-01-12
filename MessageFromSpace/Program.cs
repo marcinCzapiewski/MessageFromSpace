@@ -8,7 +8,7 @@ namespace MessageFromSpace
         {
             string fileContent = FileManager.GetFileContent();
             string encryptedFile = Decrypter.Decrypt(fileContent);
-            Console.WriteLine(encryptedFile);
+            MessagePrinter.Print(encryptedFile);
         }
     }
 }
