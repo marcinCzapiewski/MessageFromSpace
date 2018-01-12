@@ -48,11 +48,11 @@ namespace MessageFromSpace
             }
             catch (FileNotFoundException e)
             {
-                Console.WriteLine("Nie znaleziono pliku o podanej nazwie");
+                Console.WriteLine("Nie znaleziono pliku o podanej nazwie. " + e.ToString());
             }
             catch (Exception e)
             {
-                Console.WriteLine("Nie można otworzyć pliku");
+                Console.WriteLine("Nie można otworzyć pliku. " + e.ToString());
             }
 
             return "";
