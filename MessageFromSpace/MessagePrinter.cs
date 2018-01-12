@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MessageFromSpace
@@ -11,14 +12,14 @@ namespace MessageFromSpace
             Tuple<int, int> borders = CountBorders(binaryMessage);
 
             char[] message = binaryMessage.ToCharArray();
-            int counter = 0;
+            int counter = 1;
             foreach (char c in message)
             {
                 if (c == '1')
                     Console.Write("*");
                 else
                     Console.Write(" ");
-                if (counter == borders.Item2)
+                if (counter == borders.Item1)
                 {
                     Console.WriteLine();
                     counter = 0;
@@ -29,49 +30,62 @@ namespace MessageFromSpace
 
         private static Tuple<int, int> CountBorders(string binaryMessage)
         {
-            int q = binaryMessage.Length / 2;
-            int p = binaryMessage.Length - q;
+            List<int> dividers = new List<int>();
+            FindDividers(binaryMessage, dividers);
 
-            bool isPTimesQEqual = false;
+            ICollection<Tuple<int, int>> combinations = FindCombinations(dividers);
+            Tuple<int, int>[] combinationsArray = new Tuple<int, int>[combinations.Count];
+            IList<Tuple<int, int>> combinationsList;
+            int chosenCombinationNum;
+            ReadSizeFromUser(combinations, out combinationsList, out chosenCombinationNum);
 
-            do
-            {
-                isPTimesQEqual = IsPTimesQEqual(ref q, ref p, binaryMessage);
-                break;
-            } while (!isPTimesQEqual);
-
-            return new Tuple<int, int>(p, q);
+            return combinationsList[chosenCombinationNum];
         }
 
-        private static bool IsPTimesQEqual(ref int q, ref int p, string m)
+        private static void ReadSizeFromUser(ICollection<Tuple<int, int>> combinations, out IList<Tuple<int, int>> combinationsList, out int chosenCombinationNum)
         {
-            for (int i = p; i >= 0; i--)
+            Console.WriteLine("W jakim rozmiarze chcesz wyświetlić?");
+
+            int counter = 0;
+            foreach (var c in combinations)
             {
-                for (int j = q; j >= 0; j--)
+                Console.WriteLine(counter + ")" + c.Item1 + " * " + c.Item2);
+                counter++;
+            }
+
+            combinationsList = combinations.ToList();
+            ConsoleKeyInfo cki = Console.ReadKey();
+            chosenCombinationNum = int.Parse(cki.KeyChar.ToString());
+
+            Console.WriteLine();
+        }
+
+        private static ICollection<Tuple<int, int>> FindCombinations(List<int> dividers)
+        {
+            ICollection<Tuple<int, int>> combinations = new HashSet<Tuple<int, int>>();
+
+            for (int i = 0, j = dividers.Count - 1; i < dividers.Count; i++, j--)
+            {
+                if (i == j)
                 {
-                    if (i * j == m.Length)
-                    {
-                        if (isPrime(i) && isPrime(j))
-                        {
-                            p = i;
-                            q = j;
-                            return true;
-                        }
-                    }
+                    continue;
+                }
+
+                combinations.Add(new Tuple<int, int>(dividers[i], dividers[j]));
+            }
+
+            return combinations;
+        }
+
+        private static void FindDividers(string binaryMessage, List<int> dividers)
+        {
+            for (int i = 2; i <= binaryMessage.Length / 2; i++)
+            {
+                if (binaryMessage.Length % i == 0)
+                {
+                    dividers.Add(i);
                 }
             }
-            return false;
-        }
-
-        private static bool isPrime(int num)
-        {
-            for (int i = 2; i < (int)Math.Sqrt(num); i++)
-            {
-                if (num % i == 0)
-                    return false;
-            }
-
-            return true;
         }
     }
 }

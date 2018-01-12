@@ -29,7 +29,7 @@ namespace MessageFromSpace
 
         private static bool IsFileNameCorrect(string name)
         {
-            if(name.ToCharArray()[0] == '3' && name.ToCharArray()[1] == '5')
+            if(name.ToCharArray()[0] == '4' || name.ToCharArray()[1] == '0')
             {
                 return true;
             }
