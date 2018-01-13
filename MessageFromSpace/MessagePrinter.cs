@@ -11,14 +11,15 @@ namespace MessageFromSpace
             Tuple<int, int> borders = CountBorders(binaryMessage);
 
             char[] message = binaryMessage.ToCharArray();
-            int counter = 0;
+            int counter = 1;
+            int biggerOne = borders.Item1 > borders.Item2 ? borders.Item1 : borders.Item2;
             foreach (char c in message)
             {
                 if (c == '1')
                     Console.Write("*");
                 else
                     Console.Write(" ");
-                if (counter == borders.Item2)
+                if (counter == biggerOne)
                 {
                     Console.WriteLine();
                     counter = 0;
