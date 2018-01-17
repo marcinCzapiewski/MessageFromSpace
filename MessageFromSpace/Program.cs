@@ -10,7 +10,7 @@ namespace MessageFromSpace
             string encryptedFile = Decrypter.Decrypt(fileContent);
             MessagePrinter.Print(encryptedFile);
 
-            double noiseRatio = Decrypter.DigitsCounter / (double)fileContent.Length;
+            double noiseRatio = Decrypter.noiseDigitsCounter / (double)fileContent.Length;
             Console.WriteLine();
             Console.WriteLine("Ułamek szumu w wiadomości: " + noiseRatio);
         }
