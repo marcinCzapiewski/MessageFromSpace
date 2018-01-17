@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MessageFromSpace
 {
-    static class MessagePrinter
+    internal static class MessagePrinter
     {
         internal static void Print(string binaryMessage)
         {
@@ -15,10 +15,7 @@ namespace MessageFromSpace
             int counter = 1;
             foreach (char c in message)
             {
-                if (c == '1')
-                    Console.Write("*");
-                else
-                    Console.Write(" ");
+                Console.Write(c == '1' ? "*" : " ");
                 if (counter == borders.Item1)
                 {
                     Console.WriteLine();
@@ -35,9 +32,7 @@ namespace MessageFromSpace
 
             ICollection<Tuple<int, int>> combinations = FindCombinations(dividers);
             Tuple<int, int>[] combinationsArray = new Tuple<int, int>[combinations.Count];
-            IList<Tuple<int, int>> combinationsList;
-            int chosenCombinationNum;
-            ReadSizeFromUser(combinations, out combinationsList, out chosenCombinationNum);
+            ReadSizeFromUser(combinations, out IList<Tuple<int, int>> combinationsList, out var chosenCombinationNum);
 
             return combinationsList[chosenCombinationNum];
         }
@@ -60,7 +55,7 @@ namespace MessageFromSpace
             Console.WriteLine();
         }
 
-        private static ICollection<Tuple<int, int>> FindCombinations(List<int> dividers)
+        private static ICollection<Tuple<int, int>> FindCombinations(IReadOnlyList<int> dividers)
         {
             ICollection<Tuple<int, int>> combinations = new HashSet<Tuple<int, int>>();
 
@@ -77,7 +72,7 @@ namespace MessageFromSpace
             return combinations;
         }
 
-        private static void FindDividers(string binaryMessage, List<int> dividers)
+        private static void FindDividers(string binaryMessage, ICollection<int> dividers)
         {
             for (int i = 2; i <= binaryMessage.Length / 2; i++)
             {

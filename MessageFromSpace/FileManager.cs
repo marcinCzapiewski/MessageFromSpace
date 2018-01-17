@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MessageFromSpace
 {
-    static class FileManager
+    internal static class FileManager
     {
         public static string GetFileContent()
         {
@@ -22,18 +22,9 @@ namespace MessageFromSpace
             do
             {
                 name = Console.ReadLine();
-            } while (String.IsNullOrEmpty(name) || IsFileNameCorrect(name));
+            } while (string.IsNullOrEmpty(name));
 
             return name;
-        }
-
-        private static bool IsFileNameCorrect(string name)
-        {
-            if(name.ToCharArray()[0] == '4' || name.ToCharArray()[1] == '0')
-            {
-                return true;
-            }
-            return false;
         }
 
         private static string ReadFile(string name)

@@ -5,17 +5,15 @@ using System.Text;
 
 namespace MessageFromSpace
 {
-    static class Decrypter
+    internal static class Decrypter
     {
-        public static int noiseDigitsCounter { get; set; }
-        private static char[] ToZeroChars =
+        public static int NoiseDigitsCounter { get; private set; }
+        private static readonly char[] ToZeroChars =
             { 'a', 'B', 'c', 'D', 'e', 'F', 'g', 'H', 'i', 'J', 'k', 'L', 'm', 'N', 'o', 'P', 'q', 'R', 's', 'T', 'u', 'V', 'w', 'X', 'y', 'Z' };
-        private static char[] ToOneChars =
-            { 'A', 'b', 'C', 'd', 'E', 'f', 'G', 'h', 'I', 'j', 'K', 'l', 'M', 'n', 'O', 'p', 'Q', 'r', 'S', 't', 'U', 'v', 'W', 'x', 'Y', 'z' };
 
         public static string Decrypt(string s)
         {
-            noiseDigitsCounter = 0;
+            NoiseDigitsCounter = 0;
             StringBuilder sb = new StringBuilder();
 
             int separatorPosition = SearchForBlockSeparator(s);
@@ -27,21 +25,13 @@ namespace MessageFromSpace
             char[][] encryptedMessage = new char[5][];
             encryptedMessage = FillMessageTab(encryptedMessage, properContent, messageLength);
 
-            int[][] encryptedMessageInts;
-            encryptedMessageInts = ConvertToIntsArray(encryptedMessage, messageLength);
+            var encryptedMessageInts = ConvertToIntsArray(encryptedMessage, messageLength);
 
-            int[] XoredMessage = XorMessage(encryptedMessageInts, messageLength);
+            IEnumerable<int> xoredMessage = XorMessage(encryptedMessageInts, messageLength);
 
-            foreach (var x in XoredMessage)
+            foreach (var x in xoredMessage)
             {
-                if(x == 0)
-                {
-                    sb.Append('0');
-                }
-                else
-                {
-                    sb.Append('1');
-                }
+                sb.Append(x == 0 ? '0' : '1');
             }
 
             Console.WriteLine();
@@ -49,7 +39,7 @@ namespace MessageFromSpace
             return sb.ToString();
         }
 
-        private static int[] XorMessage(int[][] encryptedMessageInts, int length)
+        private static IEnumerable<int> XorMessage(IReadOnlyList<int[]> encryptedMessageInts, int length)
         {
             int[] xored = new int[length];
 
@@ -62,7 +52,7 @@ namespace MessageFromSpace
             return xored;
         }
 
-        private static int[][] ConvertToIntsArray(char[][] encryptedMessage, int length)
+        private static int[][] ConvertToIntsArray(IReadOnlyList<char[]> encryptedMessage, int length)
         {
             int[][] msg = new int[5][];
 
@@ -81,15 +71,13 @@ namespace MessageFromSpace
         private static char[][] FillMessageTab(char[][] message, string properContent, int messageLength)
         {
             int stringLenght = 0;
-            int digitsCounter = 0;
             for (int i = 0; i < 5; i++)
             {
                 message[i] = new char[messageLength];
                 for (int j = 0; j < messageLength;)
                 {
-                    if (Char.IsDigit(properContent[stringLenght]))
+                    if (char.IsDigit(properContent[stringLenght]))
                     {
-                        digitsCounter++;
                         stringLenght++;
                     }
                     else
@@ -110,15 +98,11 @@ namespace MessageFromSpace
             int length = 0;
             for (int i = 0; i < properContent.Length; i++)
             {
-                if (Char.IsDigit(properContent[i]))
-                {
-                    counter++;
-                    if (IsFiveDigitsInRow(properContent, i))
-                    {
-                        length = i - counter;
-                        break;
-                    }
-                }
+                if (!char.IsDigit(properContent[i])) continue;
+                counter++;
+                if (!IsFiveDigitsInRow(properContent, i)) continue;
+                length = i - counter;
+                break;
             }
             return length + 1;
         }
@@ -143,18 +127,14 @@ namespace MessageFromSpace
             {
                 for (int i = separatorPosition; i < s.Length; i++)
                 {
-                    if (Char.IsDigit(s[i]))
-                    {
-                        if (IsFiveDigitsInRow(s, i))
-                        {
-                            i += 5;
-                            blocksCounter++;
+                    if (!char.IsDigit(s[i])) continue;
+                    if (!IsFiveDigitsInRow(s, i)) continue;
+                    i += 5;
+                    blocksCounter++;
 
-                            if(blocksCounter == 6)
-                            {
-                                messageEndPos = i;
-                            }
-                        }
+                    if(blocksCounter == 6)
+                    {
+                        messageEndPos = i;
                     }
                 }
             } while (blocksCounter < 6);
@@ -167,18 +147,15 @@ namespace MessageFromSpace
             int i;
             for (i = 0; i < s.Length; i++)
             {
-                if (Char.IsDigit(s[i]))
+                if (!char.IsDigit(s[i])) continue;
+                if (IsFiveDigitsInRow(s, i))
                 {
-                    if (IsFiveDigitsInRow(s, i))
-                    {
-                        i += 5;
-                        break;
-                    }
-                    else
-                    {
-                        noiseDigitsCounter++;
-                        continue;
-                    }
+                    i += 5;
+                    break;
+                }
+                else
+                {
+                    NoiseDigitsCounter++;
                 }
             }
 
@@ -191,7 +168,7 @@ namespace MessageFromSpace
             {
                 if (j >= s.Length)
                     break;
-                if (!Char.IsDigit(s[j]))
+                if (!char.IsDigit(s[j]))
                 {
                     return false;
                 }
