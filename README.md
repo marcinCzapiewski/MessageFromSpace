@@ -29,4 +29,3 @@ Jak wyżej, ale wiadomość rozłożona jest na 5 kolejnych bloków i bit wiadom
 ## 5.0
 Jak wyżej, ale początek wiadomości następuje po pierwszym ciągu 5 cyfr występującym po sobie, a jej koniec został oznaczony przez szósty taki ciąg. Reszta pliku to śmieci.Każdy z pięciu bloków danych ma być zapisany w pamięci w osobnej tablicy. Program może też zawierać jajko wielkanocne.
 
-Marcin
